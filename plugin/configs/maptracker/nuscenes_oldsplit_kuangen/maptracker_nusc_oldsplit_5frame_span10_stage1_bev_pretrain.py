@@ -20,7 +20,8 @@ num_cams = 6
 
 num_gpus = 1
 batch_size = 1
-num_iters_per_epoch = 27968 // (num_gpus * batch_size)
+# there are only 40 samples for a nuscenes scene.
+num_iters_per_epoch = 80 // (num_gpus * batch_size)
 num_epochs = 18
 num_epochs_interval = num_epochs // 6
 total_iters = num_epochs * num_iters_per_epoch
