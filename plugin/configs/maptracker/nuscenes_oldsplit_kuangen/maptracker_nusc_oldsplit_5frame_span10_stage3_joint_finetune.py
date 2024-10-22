@@ -17,7 +17,7 @@ img_h = 480
 img_w = 800
 img_size = (img_h, img_w)
 
-num_gpus = 8
+num_gpus = 1
 batch_size = 2
 num_iters_per_epoch = 27968 // (num_gpus * batch_size)
 num_epochs = 48
@@ -90,22 +90,18 @@ model = dict(
         use_grid_mask=True,
         img_backbone=dict(
             type='ResNet',
-            with_cp=False,
-            # pretrained='./resnet50_checkpoint.pth',
-            pretrained='open-mmlab://detectron2/resnet50_caffe',
-            depth=50,
+            depth=18,
             num_stages=4,
             out_indices=(1, 2, 3),
-            frozen_stages=-1,
-            norm_cfg=norm_cfg,
+            frozen_stages=1,
+            norm_cfg=dict(type='BN', requires_grad=True),
             norm_eval=True,
-            style='caffe',
-            dcn=dict(type='DCNv2', deform_groups=1, fallback_on_stride=False),
-            stage_with_dcn=(False, False, True, True)
+            style='pytorch',
+            init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet18')
             ),
         img_neck=dict(
             type='FPN',
-            in_channels=[512, 1024, 2048],
+            in_channels=[128, 256, 512],
             out_channels=bev_embed_dims,
             start_level=0,
             add_extra_convs=True,
@@ -371,7 +367,7 @@ data = dict(
     train=dict(
         type='NuscDataset',
         data_root='./datasets/nuscenes',
-        ann_file='./datasets/nuscenes/nuscenes_map_infos_train.pkl',
+        ann_file='./datasets/nuscenes/nuscenes_map_infos_val.pkl',
         meta=meta,
         roi_size=roi_size,
         cat2id=cat2id,
