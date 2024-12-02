@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+        "name": "Run vis_global.py",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/visualization/vis_global.py",
+        "args": [
+          "plugin/configs/maptracker/nuscenes_oldsplit_kuangen/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py",
+          "--data_path", "work_dirs/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune/pos_predictions.pkl",
+          "--out_dir", "vis_global/nuscenes_old/maptracker",
+          "--option", "vis-pred",
+          "--per_frame_result", "1"
+        ],
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+        },
+      {
+        "name": "Test",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/tools/test.py",
+        "args": [
+            "${workspaceFolder}/plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py",
+            "${workspaceFolder}/work_dirs/pretrained_ckpts/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune/latest.pth",
+            "--launcher", "none", // if launcher is none, distributed = False
+            "--eval", "--eval-options", "save_semantic=True"
+        ],
+        "console": "integratedTerminal",
+        "env": {
+            "PYTHONPATH": "${workspaceFolder}"
+        },
+        "cwd": "${workspaceFolder}",
+    },
+    ]
+  }

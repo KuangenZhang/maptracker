@@ -18,10 +18,10 @@ img_w = 800
 img_size = (img_h, img_w)
 
 num_gpus = 1
-batch_size = 2
+batch_size = 1
 # there are only 40 samples for a nuscenes scene.
 num_iters_per_epoch = 80 // (num_gpus * batch_size)
-num_epochs = 48
+num_epochs = 200
 num_epochs_interval = num_epochs // 8
 total_iters = num_epochs * num_iters_per_epoch
 num_queries = 100
@@ -446,4 +446,5 @@ log_config = dict(
 
 SyncBN = True
 
-load_from = "work_dirs/maptracker_nusc_oldsplit_5frame_span10_stage2_warmup/latest.pth"
+# load_from = "work_dirs/maptracker_nusc_oldsplit_5frame_span10_stage2_warmup/latest.pth"
+load_from = "work_dirs/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune/latest.pth"

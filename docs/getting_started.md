@@ -15,6 +15,11 @@ Run the following command to do inference and evaluation using the pretrained ch
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7  bash tools/dist_test.sh  plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py    work_dirs/pretrained_ckpts/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune/latest.pth  8  --eval --eval-options save_semantic=True
 ```
 
+```bash
+CUDA_VISIBLE_DEVICES=0  bash tools/dist_test.sh  plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py    work_dirs/pretrained_ckpts/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune/latest.pth  1  --eval --eval-options save_semantic=True
+```
+
+
 Set the ``--eval-options save_semantic=True`` to also save the semantic segmentation results of the BEV module.
 
 
@@ -53,18 +58,18 @@ The training consists of three stages as detailed in the paper. We train the mod
 
 **Stage 1**: BEV pretraining with semantic segmentation losses:
 ```
-bash ./tools/dist_train.sh plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage1_bev_pretrain.py 8
+bash ./tools/dist_train.sh plugin/configs/maptracker/nuscenes_oldsplit_kuangen/maptracker_nusc_oldsplit_5frame_span10_stage1_bev_pretrain.py 8
 ```
 
 **Stage 2**: Vector module warmup with a large batch size while freezing the BEV module:
 ```
-bash ./tools/dist_train.sh plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage2_warmup.py 8
+bash ./tools/dist_train.sh plugin/configs/maptracker/nuscenes_oldsplit_kuangen/maptracker_nusc_oldsplit_5frame_span10_stage2_warmup.py 1
 ```
 Set up the ``load_from=...`` properly in the config file to load the checkpoint from stage 1.
 
 **Stage 3**: Joint finetuning:
 ```
-bash ./tools/dist_train.sh plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py 8
+bash ./tools/dist_train.sh plugin/configs/maptracker/nuscenes_oldsplit_kuangen/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py 1
 ```
 Set up the ``load_from=...`` properly in the config file to load the checkpoint from stage 2.
 
@@ -87,13 +92,13 @@ Set the ``--per_frame_result`` to 1 to generate the per-frame video, the visuali
 Examples:
 ```bash
 # Visualize MapTracker's prediction
-python tools/visualization/vis_global.py plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py \
+python tools/visualization/vis_global.py plugin/configs/maptracker/nuscenes_oldsplit_kuangen/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py \
 --data_path work_dirs/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune/pos_predictions.pkl \
 --out_dir vis_global/nuscenes_old/maptracker \
 --option vis-pred  --per_frame_result 1
 
 # Visualize groud truth data
-python tools/visualization/vis_global.py plugin/configs/maptracker/nuscenes_oldsplit/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py \
+python tools/visualization/vis_global.py plugin/configs/maptracker/nuscenes_oldsplit_kuangen/maptracker_nusc_oldsplit_5frame_span10_stage3_joint_finetune.py \
 --data_path datasets/nuscenes/nuscenes_map_infos_val_gt_tracks.pkl \
 --out_dir vis_global/nuscenes_old/gt  \
 --option vis-gt --per_frame_result 0
