@@ -587,6 +587,8 @@ class MapTracker(BaseMapper):
     def forward_test(self, img, points=None, img_metas=None, seq_info=None, **kwargs):
         '''
             inference pipeline
+            img: (batch, camera_num, rgb, rows, cols)
+            
         '''
 
         assert img.shape[0] == 1, 'Only support bs=1 per-gpu for inference'
